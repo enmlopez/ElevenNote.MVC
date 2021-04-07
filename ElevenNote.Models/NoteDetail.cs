@@ -21,5 +21,6 @@ namespace ElevenNote.Models
 
         [Display(Name = "Modified")]
         public DateTimeOffset? ModifiedUtc { get; set; }
+        public string Category { get; set; }
     }
 }
