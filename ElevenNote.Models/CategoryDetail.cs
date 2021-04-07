@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElevenNote.Data
+namespace ElevenNote.Models
 {
-    public class Category
+    public class CategoryDetail
     {
-        [Key]
-        public int CategoryId { get; set; }
+        [Display(Name ="ID")]
+        public int CatId { get; set; }
 
-        [Required]
+        [Display(Name ="Name")]
         public string CatName { get; set; }
 
-        public virtual ICollection<Note> Notes { get; set; } = new List<Note>();
+        public List<NoteListItem> ListOfNotes { get; set; }
 
-        [Required]
+        [Display(Name ="Created")]
         public DateTimeOffset CreatedUtc { get; set; }
 
+
+        [Display(Name ="Modified")]
         public DateTimeOffset? ModifiedUtc { get; set; }
+
     }
 }
