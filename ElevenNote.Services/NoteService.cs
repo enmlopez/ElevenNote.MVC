@@ -19,7 +19,14 @@ namespace ElevenNote.Services
 
         public bool CreateNote(NoteCreate model)
         {
-            Note entity = new Note() { OwnerId = _userId, Title = model.Title, Content = model.Content, CreatedUtc = DateTimeOffset.Now };
+            Note entity = new Note()
+            {
+                OwnerId = _userId,
+                Title = model.Title,
+                Content = model.Content,
+                CreatedUtc = DateTimeOffset.Now,
+                CategoryId = model.CategoryId
+            };
 
             using (ApplicationDbContext ctx = new ApplicationDbContext())
             {
@@ -35,7 +42,13 @@ namespace ElevenNote.Services
                 IEnumerable<NoteListItem> query = ctx
                     .Notes
                     .Where(e => e.OwnerId == _userId)
-                    .Select(e => new NoteListItem { NoteId = e.NoteId, Title = e.Title, CreatedUtc = e.CreatedUtc });
+                    .Select(e => new NoteListItem
+                    {
+                        NoteId = e.NoteId,
+                        Title = e.Title,
+                        CreatedUtc = e.CreatedUtc,
+                        Category = e.CategoryId + " " + e.Category.Name
+                    });
                 return query.ToArray();
             }
         }
@@ -45,7 +58,15 @@ namespace ElevenNote.Services
             using (ApplicationDbContext ctx = new ApplicationDbContext())
             {
                 Note entity = ctx.Notes.SingleOrDefault(e => e.NoteId == id && e.OwnerId == _userId);
-                return new NoteDetail { NoteId = entity.NoteId, Content = entity.Content, Title = entity.Title, CreatedUtc = entity.CreatedUtc, ModifiedUtc = entity.ModifiedUtc };
+                return new NoteDetail
+                {
+                    NoteId = entity.NoteId,
+                    Content = entity.Content,
+                    Title = entity.Title,
+                    CreatedUtc = entity.CreatedUtc,
+                    ModifiedUtc = entity.ModifiedUtc,
+                    Category = entity.CategoryId + " " + entity.Category.Name
+                };
             }
         }
 
@@ -57,6 +78,7 @@ namespace ElevenNote.Services
                 entity.Title = model.Title;
                 entity.Content = model.Content;
                 entity.ModifiedUtc = DateTimeOffset.UtcNow;
+                entity.CategoryId = model.CategoryId; //check if its categoryId or category
 
                 return ctx.SaveChanges() == 1;
             }

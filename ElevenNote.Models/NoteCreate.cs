@@ -18,6 +18,6 @@ namespace ElevenNote.Models
         public string Content { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
     }
 }
